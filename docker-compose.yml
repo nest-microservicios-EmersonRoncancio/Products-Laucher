@@ -67,3 +67,5 @@ services:
     environment:
       - PORT=3004
       - NATS_SERVER=nats://nats-server:4222
+      - MONGO_DB=${MONGO_DB}
+      - SECRET_JWT=${SECRET_JWT}
