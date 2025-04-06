@@ -70,3 +70,18 @@ services:
       - NATS_SERVER=nats://nats-server:4222
       - MONGO_DB=${MONGO_DB}
       - SECRET_JWT=${SECRET_JWT}
+
+  payments-ms:
+    build: ./payments-ms
+    ports:
+      - 3003:3003
+    volumes:
+      - ./payments-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3003
+      - SECRET_KEY_STRIPE=${SECRET_KEY_STRIPE_PAYMENTS}
+      - SECRET_KEY_WEBHOOK_STRIPE=${SECRET_KEY_WEBHOOK_STRIPE_PAYMENTS}
+      - SUCCES_URL=http://localhost:3003/payment/success
+      - CANCEL_URL=http://localhost:3003/payment/cancel
+      - NATS_SERVER=nats://nats-server:4222
