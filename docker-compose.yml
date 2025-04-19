@@ -44,7 +44,7 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: orders
 
-  orders-ms:
+  order-ms:
     depends_on:
       - order-db
     build: ./order-ms

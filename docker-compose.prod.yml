@@ -40,19 +40,17 @@ services:
   #     POSTGRES_PASSWORD: 123456
   #     POSTGRES_DB: orders
 
-  # orders-ms:
-  #   depends_on:
-  #     - order-db
-  #   build: ./order-ms
-  #   ports:
-  #     - 3002:3002
-  #   volumes:
-  #     - ./order-ms/src:/usr/src/app/src
-  #   command: npm run start:dev
-  #   environment:
-  #     - PORT=3002
-  #     - NATS_SERVER=nats://nats-server:4222
-  #     - DATABASE_URL=postgresql://postgres:123456@order-db:5432/orders?schema=public
+  order-ms:
+    build: 
+      context: ./order-ms
+      dockerfile: dockerfile.prod
+      args:
+        - POSTGRES_DB=${POSTGRES_DB}
+    environment:
+      - PORT=3002
+      - NATS_SERVER=nats://nats-server:4222
+      - DATABASE_URL=${POSTGRES_DB}
+    image: orders-ms-prod
 
   auth-ms:
     build: 
