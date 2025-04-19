@@ -1,0 +1,81 @@
+version: '3'
+
+services:
+
+  nats-server:
+    image: nats:latest
+
+  client-gateway:
+    build: 
+      context: ./client-gateway
+      dockerfile: dockerfile.prod
+    ports:
+      - ${PORT_CLIENT_GATEWAY}:3000
+    environment:
+      - PORT=3000
+      - NATS_SERVER=nats://nats-server:4222
+      - SECRET_JWT=${SECRET_JWT}
+    image: client-gateway-prod
+
+  products-ms:
+    build: 
+      context: ./products-ms
+      dockerfile: dockerfile.prod
+    environment:
+      - PORT=3001
+      - NATS_SERVER=nats://nats-server:4222
+      - DATABASE_URL=file:./dev.db
+    image: products-ms-prod
+
+  # order-db:
+  #   container_name: order-db
+  #   image: postgres:16.2
+  #   restart: always
+  #   volumes:
+  #     - ./order-ms/postgres:/var/lib/postgresql/data
+  #   ports:
+  #     - 5433:5432
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: 123456
+  #     POSTGRES_DB: orders
+
+  # orders-ms:
+  #   depends_on:
+  #     - order-db
+  #   build: ./order-ms
+  #   ports:
+  #     - 3002:3002
+  #   volumes:
+  #     - ./order-ms/src:/usr/src/app/src
+  #   command: npm run start:dev
+  #   environment:
+  #     - PORT=3002
+  #     - NATS_SERVER=nats://nats-server:4222
+  #     - DATABASE_URL=postgresql://postgres:123456@order-db:5432/orders?schema=public
+
+  auth-ms:
+    build: 
+      context: ./auth-ms
+      dockerfile: dockerfile.prod
+    image: auth-ms-prod
+    environment:
+      - PORT=3004
+      - NATS_SERVER=nats://nats-server:4222
+      - MONGO_DB=${MONGO_DB}
+      - SECRET_JWT=${SECRET_JWT}
+
+  payments-ms:
+    build: 
+      context: ./payments-ms
+      dockerfile: dockerfile.prod
+    ports:
+      - 3003:3003
+    environment:
+      - PORT=3003
+      - SECRET_KEY_STRIPE=${SECRET_KEY_STRIPE_PAYMENTS}
+      - SECRET_KEY_WEBHOOK_STRIPE=${SECRET_KEY_WEBHOOK_STRIPE_PAYMENTS}
+      - SUCCES_URL=http://localhost:3003/payment/success
+      - CANCEL_URL=http://localhost:3003/payment/cancel
+      - NATS_SERVER=nats://nats-server:4222
+    image: payments-ms-prod
