@@ -15,7 +15,7 @@ services:
       - PORT=3000
       - NATS_SERVER=nats://nats-server:4222
       - SECRET_JWT=${SECRET_JWT}
-    image: client-gateway-prod
+    image: southamerica-east1-docker.pkg.dev/microservicios-shop/image-registry/client-gateway-prod
 
   products-ms:
     build: 
@@ -25,7 +25,7 @@ services:
       - PORT=3001
       - NATS_SERVER=nats://nats-server:4222
       - DATABASE_URL=file:./dev.db
-    image: products-ms-prod
+    image: southamerica-east1-docker.pkg.dev/microservicios-shop/image-registry/products-ms-prod
 
   # order-db:
   #   container_name: order-db
@@ -56,7 +56,7 @@ services:
     build: 
       context: ./auth-ms
       dockerfile: dockerfile.prod
-    image: auth-ms-prod
+    image: southamerica-east1-docker.pkg.dev/microservicios-shop/image-registry/auth-ms-prod
     environment:
       - PORT=3004
       - NATS_SERVER=nats://nats-server:4222
@@ -76,4 +76,4 @@ services:
       - SUCCES_URL=http://localhost:3003/payment/success
       - CANCEL_URL=http://localhost:3003/payment/cancel
       - NATS_SERVER=nats://nats-server:4222
-    image: payments-ms-prod
+    image: southamerica-east1-docker.pkg.dev/microservicios-shop/image-registry/payments-ms-prod
