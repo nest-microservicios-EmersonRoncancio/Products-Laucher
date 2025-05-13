@@ -50,7 +50,7 @@ services:
       - PORT=3002
       - NATS_SERVER=nats://nats-server:4222
       - DATABASE_URL=${POSTGRES_DB}
-    image: orders-ms-prod
+    image: southamerica-east1-docker.pkg.dev/microservicios-shop/image-registry/orders-ms-prod
 
   auth-ms:
     build: 
