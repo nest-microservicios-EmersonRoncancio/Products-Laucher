@@ -27,5 +27,11 @@ spec:
               value: helloMani
             - name: NATS_SERVER
               value: nats://nats
-          resources: {}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
 status: {}

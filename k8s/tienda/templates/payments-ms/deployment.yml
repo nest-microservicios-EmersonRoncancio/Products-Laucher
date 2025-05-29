@@ -39,5 +39,11 @@ spec:
                 secretKeyRef:
                   name: payments-secrets
                   key: SECRET_KEY_WEBHOOK_STRIPE
-          resources: {}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 200m
+              memory: 512Mi
 status: {}
