@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: client-gateway-prod
+  name: client-gateway-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-gateway-prod
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: client-gateway-prod
+    spec:
+      containers:
+        - image: southamerica-east1-docker.pkg.dev/microservicios-shop/image-registry/client-gateway-prod
+          name: client-gateway-prod
+          env:
+            - name: PORT
+              value: "3000"
+            - name: SECRET_JWT
+              value: helloMani
+            - name: NATS_SERVER
+              value: nats://nats
+          resources: {}
+status: {}

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: auth-ms-prod
+  name: auth-ms-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-ms-prod
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: auth-ms-prod
+    spec:
+      containers:
+        - image: southamerica-east1-docker.pkg.dev/microservicios-shop/image-registry/auth-ms-prod
+          name: auth-ms-prod
+          env:
+            - name: PORT
+              value: "3003"
+            - name: NATS_SERVER
+              value: nats://nats
+            - name: MONGO_DB
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secrets
+                  key: MONGO_DB
+            - name: SECRET_JWT
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secrets
+                  key: SECRET_JWT
+          resources: {}
+status: {}
